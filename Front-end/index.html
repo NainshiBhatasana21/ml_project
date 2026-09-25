@@ -97,7 +97,7 @@
         <h3 class="login-form-title">Welcome back</h3>
         <p class="login-form-subtitle">Sign in to your AI dashboard to continue.</p>
         
-        <form id="form-login">
+        <form id="form-login" onsubmit="event.preventDefault(); if (window.loginToDashboard) window.loginToDashboard(); return false;">
           <div class="form-group" style="margin-bottom: 16px;">
             <label for="login-email" style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">Email Address</label>
             <div class="input-with-icon">
@@ -125,12 +125,11 @@
             <a href="#" class="forgot-pwd-link" style="color: var(--primary); text-decoration: none; font-weight: 600;">Forgot password?</a>
           </div>
           
-          <button type="submit" class="btn btn-primary btn-submit-login" style="width: 100%; justify-content: center; padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; font-weight: 600;">
+          <button type="button" id="btn-login-submit" class="btn btn-primary btn-submit-login" style="width: 100%; justify-content: center; padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; font-weight: 600;" onclick="if (window.loginToDashboard) { window.loginToDashboard(); }">
             <span>Sign In to Dashboard</span>
           </button>
 
-
-          <button type="button" id="btn-login-demo" class="btn btn-secondary-outline btn-demo-login" style="width: 100%; justify-content: center; padding: 12px 24px; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+          <button type="button" id="btn-login-demo" class="btn btn-secondary-outline btn-demo-login" style="width: 100%; justify-content: center; padding: 12px 24px; display: flex; align-items: center; gap: 8px; font-weight: 600;" onclick="if (window.loginToDashboard) { window.loginToDashboard(); }">
             <i data-lucide="user-check" style="width: 18px; height: 18px;"></i>
             <span>Continue with Demo Account</span>
           </button>

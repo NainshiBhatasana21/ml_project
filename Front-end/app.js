@@ -1,5 +1,25 @@
 // CORE LOGIC FOR AEGIS VEHICLE INSURANCE FRAUD ANALYTICS HUB
 
+window.loginToDashboard = function() {
+  const loginPage = document.getElementById('login-page');
+  const appContainer = document.getElementById('app-container');
+  if (loginPage) {
+    loginPage.style.opacity = '0';
+    loginPage.style.transition = 'opacity 0.25s ease';
+    setTimeout(() => {
+      loginPage.style.display = 'none';
+    }, 250);
+  }
+  if (appContainer) {
+    appContainer.style.display = 'flex';
+    appContainer.style.opacity = '1';
+  }
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+  window.dispatchEvent(new Event('resize'));
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // Global States
   let activeClaimsData = [];
@@ -39,19 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let chartAnRisk = null;
   let chartOverviewVehicle = null;
 
-  // Initialize UI
-  initNavigation();
-  initTheme();
-  initDataUpload();
-  initTableSorting();
-  initPredictorForm();
-  initDataPrepActions();
-  initMLModelView();
+  // Initialize UI - Login is prioritized first
   initLogin();
+  try { initNavigation(); } catch (e) { console.warn('initNavigation warning:', e); }
+  try { initTheme(); } catch (e) { console.warn('initTheme warning:', e); }
+  try { initDataUpload(); } catch (e) { console.warn('initDataUpload warning:', e); }
+  try { initTableSorting(); } catch (e) { console.warn('initTableSorting warning:', e); }
+  try { initPredictorForm(); } catch (e) { console.warn('initPredictorForm warning:', e); }
+  try { initDataPrepActions(); } catch (e) { console.warn('initDataPrepActions warning:', e); }
+  try { initMLModelView(); } catch (e) { console.warn('initMLModelView warning:', e); }
 
   // Load default dataset
   if (typeof DEFAULT_CLAIMS_DATA !== 'undefined') {
-    loadDataset(DEFAULT_CLAIMS_DATA);
+    try { loadDataset(DEFAULT_CLAIMS_DATA); } catch (e) { console.warn('loadDataset warning:', e); }
   } else {
     console.error('DEFAULT_CLAIMS_DATA not found. Please upload a CSV file.');
   }
@@ -1962,40 +1982,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('form-login');
     const demoBtn = document.getElementById('btn-login-demo');
 
+    const submitBtn = document.getElementById('btn-login-submit');
+
     // Handle Form Login
     if (loginForm) {
       loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        performLoginTransition();
+        window.loginToDashboard();
+      });
+    }
+
+    // Handle Submit Button Click
+    if (submitBtn) {
+      submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.loginToDashboard();
       });
     }
 
     // Handle Demo Login
     if (demoBtn) {
-      demoBtn.addEventListener('click', () => {
-        performLoginTransition();
+      demoBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.loginToDashboard();
       });
-    }
-
-    function performLoginTransition() {
-      // Fade out login page, then hide and show dashboard container
-      loginPage.style.opacity = '0';
-      loginPage.style.transform = 'scale(1.02)';
-      loginPage.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      
-      setTimeout(() => {
-        loginPage.style.display = 'none';
-        appContainer.style.display = 'flex';
-        appContainer.style.opacity = '0';
-        
-        // Trigger resize to fix any chart dimensions
-        window.dispatchEvent(new Event('resize'));
-        
-        setTimeout(() => {
-          appContainer.style.opacity = '1';
-          appContainer.style.transition = 'opacity 0.6s ease';
-        }, 50);
-      }, 600);
     }
 
     // Password visibility toggle
